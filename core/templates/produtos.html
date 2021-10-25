@@ -1,0 +1,74 @@
+{% load bootstrap4 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Produtos</title>
+    {% bootstrap_css %}
+</head>
+<body>
+        <div class="container">
+            <img src="{% static 'images/home.png' %}" alt="100" width="200"/>
+            <a  class="btn btn-danger"  href="{% url 'core:fornecedores' %}"><header>ir para fornecedores</header></a>
+            <a  class="btn btn-danger"  href="{% url 'core:representantes' %}"><header>ir para representantes</header></a>
+            <a  class="btn btn-warning"  href="{% url 'core:index' %}"><header>voltar para pagina inicial</header></a>
+            {% if user.is_superuser %}
+                <a  class="btn btn-secondary"  href="{% url 'core:produto' %}"><header>cadastrar novo produto</header></a>
+            {% endif %}
+            <h2 class="text-center">Produtos Cadastrados no Sistema PYzza!</h2>
+            <table class="table table-danger">
+                <thead>
+                    <tr>
+                        <th scope="col">Nome do Produto</th>
+                        <th scope="col" class="text-center">Preço</th>
+                        <th scope="col" class="text-center">Medida</th>
+                        <th scope="col" class="text-center">Nome da Empresa</th>
+                        <th scope="col" class="text-center">Estoque Atual</th>
+                        <th scope="col">Situação/Estoque</th>
+                        <th scope="col">Validade</th>
+                        {% if user.is_superuser %}
+                            <th scope="col" class="text-center">Opção</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for produto in produtos %}
+                        <tr>
+                            <td scope="row"><a href="#modal{{produto.id}}" data-toggle="modal">{{ produto.nome }}</a></td>
+                            <td scope="row" class="text-center">{{ produto.preco }}</td>
+                            <td scope="row" class="text-center">{{ produto.medida }}</td>
+                            <td scope="row" class="text-center">{{ produto.empresa }}</td>
+                            <td scope="row" class="text-center">{{ produto.estoque }}</td>
+                            <td scope="row">{{ produto.situacao_produto}}</td>
+                            <td scope="row">{{ produto.validade_produto}}</td>
+                            <td scope="row">
+                                {% if user.is_superuser %}
+                                    <a class="btn btn-danger" href="{% url 'core:atualizar-produto' produto.pk %}">Editar</a>
+                                    <a class="btn btn-primary" href="{% url 'core:delete-produto' produto.pk %}">Deletar</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <div class="modal fade bd-example-modal-lg show" id="modal{{produto.id}}" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">{{produto.nome}}</h5>
+                                        <button type="button" class="close" data-dismiss="modal">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body" id="dynamic-content">
+                                        <p>Registro de entrada em: {{produto.criacao}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+</div>
+{% bootstrap_javascript jquery='full' %}
+</body>
+</html>
+

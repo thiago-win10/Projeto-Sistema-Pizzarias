@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+    <div class ="container text-center" role="alert">
+        <img src="{% static 'images/home.png' %}" alt="100"  width="500"/>
+        {% if user.is_anonymous %}
+            <h3 class="alert alert-primary">Sistema de Informação para Pizzarias</h3>
+        {% endif %}
+        {% if user.is_anonymous %}
+            <a class="#" href="{% url 'core:index' %}"></a>
+        {% endif %}
+            {% if user.is_superuser %}
+            <div class="alert alert-primary text-center" role="alert">
+                <h3>Bem Vindo ao Sistema de Informação para Pizzarias</h3>
+                <a class="btn btn-success" href="{% url 'core:produto' %}">Cadastrar Produtos</a>
+                <a class="btn btn-success" href="{% url 'core:fornecedor' %}">Cadastrar Fornecedores</a>
+                <a class="btn btn-success" href="{% url 'core:representante' %}">Cadastrar Representante</a>
+            {% endif %}
+            </div>
+        {% if user.is_authenticated %}
+            <div class="alert alert-danger text-center" role="alert">
+
+                    <h3>Registros do Sistema Pyzza!</h3>
+                    <a class= "btn btn-danger" href="{% url 'core:produtos' %}">Produtos</a>
+                    <a class="btn btn-danger" href="{% url 'core:fornecedores' %}">Fornecedores</a>
+                    <a class="btn btn-danger" href="{% url 'core:representantes' %}">Representantes</a>
+            </div>
+                <div class="alert alert-secondary text-center">
+                    <a>Cadastrar: Login na Aréa Administrativa
+                    <a class="btn btn-dark" href="http://localhost:8000/admin/login/?next=/admin/">acessar</a></a>
+                </div>
+        {% endif %}
+
+    </div>
+{% endblock %}
+

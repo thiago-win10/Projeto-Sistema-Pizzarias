@@ -1,0 +1,52 @@
+{% load bootstrap4 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Fornecedores</title>
+    {% bootstrap_css %}
+</head>
+<body>
+       <div class="container">
+            <img src="{% static 'images/home.png' %}" alt="100" width="200"/>
+            <a  class="btn btn-primary"  href="{% url 'core:produtos' %}"><h8>ir para produtos</h8></a>
+            <a  class="btn btn-primary"  href="{% url 'core:representantes' %}"><h8>ir para representantes</h8></a>
+            <a  class="btn btn-success"  href="{% url 'core:index' %}"><h8>voltar para pagina inicial</h8></a>
+            {% if user.is_superuser %}
+                <a  class="btn btn-secondary"  href="{% url 'core:fornecedor' %}"><h8>cadastrar novo fornecedor</h8></a>
+            {% endif %}
+            <h2 class="text-center">Fornecedores Cadastrados no Sistema PYzza!</h2>
+            <table class="table table-primary">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-center">Empresa</th>
+                        <th scope="col" class="text-center">CNPJ</th>
+                        <th scope="col" class="text-center">Telefone</th>
+                        <th scope="col" class="text-center">Email</th>
+                        {% if user.is_superuser %}
+                            <th scope="col" class="text-center">Opção</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cliente in fornecedores %}
+                        <tr>
+                            <td scope="row" class="text-center">{{ cliente.empresa }}</td>
+                             <td scope="row" class="text-center">{{ cliente.cnpj }}</td>
+                             <td scope="row" class="text-center">{{ cliente.telefone }}</td>
+                             <td scope="row" class="text-center">{{ cliente.email }}</td>
+                             <td scope="row">
+                                {% if user.is_superuser %}
+                                    <a class="btn btn-info" href="{% url 'core:editar-fornecedor' cliente.pk %}">Editar</a>
+                                    <a class="btn btn-dark" href="{% url 'core:apagar-fornecedor' cliente.pk %}">Deletar</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+</div>
+{% bootstrap_javascript jquery='full' %}
+</body>
+</html>
